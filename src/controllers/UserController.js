@@ -3,10 +3,16 @@ import bcrypt from 'bcrypt';
 
 
 const register = async (userData) => {
+
     const { name, email, country, city, password, role, shop } = userData;
+
     function checkPassword(password) {
-        var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         return re.test(password);
+    }
+    async function existEmail (emailFuntion){
+        const response = await User.exists({ email: emailFuntion })
+        return response;
     }
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -18,7 +24,10 @@ const register = async (userData) => {
     } else if (!validateEmail(email)) {
         console.log("The email doesn't valid")
         return false
-    } else if (country == "" && city == "") {
+    }else if (existEmail(email)){
+        console.log("The email is already on use");
+        return false
+    } else if (country == "" || city == "") {
         console.log("The country and the city are required");
         return false;
     } else if (role == "") {
@@ -38,7 +47,7 @@ const register = async (userData) => {
                         city: city,
                         password: bcrypt.hashSync(password, 8),
                         role: role,
-                        shop: "false"
+                        shop: ""
                     }
                 )
                 return true
@@ -79,9 +88,8 @@ const login = async (userData) => {
     if (validateEmail(email)) {
         const response = await User.exists({ email: email })
         if (response) {
-            const DBData = await User.findOne({ email: email })
-            const comparePass = await bcrypt.compare(password, DBData.password)
-            console.log(comparePass)
+            const DBData = await User.findOne({ email: email });
+            const comparePass = await bcrypt.compare(password, DBData.password);
             if (DBData.email == email && comparePass) {
                 console.log("All ok");
                 return true;

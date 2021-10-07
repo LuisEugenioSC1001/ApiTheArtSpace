@@ -7,6 +7,7 @@ import userRoutes from "./routes/UserRoutes.js";
 const app = express();
 const port = settings.port;
 const url = settings.Url;
+
 app.use(express.json());
 app.use(cors({ origin: true }));
 app.use(userRoutes);
