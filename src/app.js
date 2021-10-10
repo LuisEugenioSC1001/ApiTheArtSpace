@@ -5,7 +5,7 @@ import cors from 'cors';
 import userRoutes from "./routes/UserRoutes.js";
 
 const app = express();
-const port = settings.port;
+const port =  settings.port;
 const url = settings.Url;
 
 app.use(express.json());
@@ -15,6 +15,7 @@ app.listen(port, async () => {
     try {
         await mongoose.connect(url), {
             useNEwUrlParser: true,
+            useUnifiedTopology:true
         }
     }catch(e){
         console.log("Failure connection with the data base")

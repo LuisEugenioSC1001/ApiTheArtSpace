@@ -10,7 +10,7 @@ const register = async (userData) => {
         const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         return re.test(password);
     }
-    async function existEmail (emailFuntion){
+    async function existEmail(emailFuntion) {
         const response = await User.exists({ email: emailFuntion })
         return response;
     }
@@ -19,23 +19,17 @@ const register = async (userData) => {
         return re.test(String(email).toLowerCase());
     }
     if (name == "") {
-        console.log("The name cannot be empty")
-        return false
+        return ({ "Status": "Failure", "Description": "The name cannot be empty" })
     } else if (!validateEmail(email)) {
-        console.log("The email doesn't valid")
-        return false
-    }else if (existEmail(email)){
-        console.log("The email is already on use");
-        return false
+        return ({ "Status": "Failure", "Description": "The email doesn't valid" })
+    } else if (existEmail(email)) {
+        return ({ "Status": "Failure", "Description": "The email is already on use" })
     } else if (country == "" || city == "") {
-        console.log("The country and the city are required");
-        return false;
+        return ({ "Status": "Failure", "Description": "The country and the city are required" });
     } else if (role == "") {
-        console.log("Please select a role");
-        return false;
+        return ({ "Status": "Failure", "Description": "Please select a role" });
     } else if (!checkPassword(password)) {
-        console.log("The password must contain at least one uppercase letter, at least one special character and its length must be greater than 8 characters")
-        return false;
+        return ({ "Status": "Failure", "Description": "The password must contain at least one uppercase letter, at least one special character and its length must be greater than 8 characters" });
     } else {
         if (role.toLowerCase() == "user") {
             try {
@@ -50,10 +44,9 @@ const register = async (userData) => {
                         shop: ""
                     }
                 )
-                return true
+                return ({ "Status": "Success", "Description": "User Create succesfully" })
             } catch (error) {
-                console.log("The Query failure");
-                return false
+                return ({ "Status": "Failure", "Description": "The Query failure" })
             }
 
         } else {
@@ -69,9 +62,9 @@ const register = async (userData) => {
                         shop: shop
                     }
                 )
-                return true
+                return ({ "Status": "Success", "Description": "User Create successfully" })
             } catch (error) {
-                console.log("The Query failure")
+                return ({ "Status": "Failure", "Description": "The Query failure" });
             }
 
         }
@@ -92,19 +85,16 @@ const login = async (userData) => {
             const comparePass = await bcrypt.compare(password, DBData.password);
             if (DBData.email == email && comparePass) {
                 console.log("All ok");
-                return true;
-            }else{
-                console.log("The password doesn't concuerd");
-                return false
+                return ({ "Status": "Success", "Description": "Login successfully" });
+            } else {
+                return ({ "Status": "Failure", "Description": "The password doesn't concuerd" })
             }
         } else {
-            console.log("The email doesn't exist");
-            return false;
+            return ({ "Status": "Failure", "Description": "The email doesn't exist" });
         }
 
     } else {
-        console.log("The email doesn't valid");
-        return false;
+        return ({ "Status": "Failure", "Description": "The email doesn't valid" });
     }
 }
 const userController = { login, register };
