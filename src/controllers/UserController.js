@@ -1,7 +1,10 @@
 import User from '../models/UserModel.js';
 import bcrypt from 'bcrypt';
 
-
+const validationEmail = async function existEmail(emailFuntion) {
+        const response = await User.exists({ email: emailFuntion })
+        return response;
+    }
 const register = async (userData) => {
 
     const { name, email, country, city, password, role, shop } = userData;
@@ -97,6 +100,6 @@ const login = async (userData) => {
         return ({ "Status": "Failure", "Description": "The email doesn't valid" });
     }
 }
-const userController = { login, register };
+const userController = { login, register, validationEmail };
 
 export default userController;
