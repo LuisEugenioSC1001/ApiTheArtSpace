@@ -2,6 +2,11 @@ import express from 'express';
 import userController from '../controllers/UserController.js';
 const userRoutes = express.Router();
 
+userRoutes.post('/validateemail',async (req, res)=>{
+    let response = await userController.validationEmail(req.body);
+    res.json(response);
+})
+
 userRoutes.post('/login',async (req, res)=>{
     let response = await userController.login(req.body);
     res.json(response);
