@@ -18,7 +18,7 @@ app.listen(port, async () => {
             useUnifiedTopology:true
         }
     }catch(e){
-        console.log("Failure connection with the data base")
+        console.log("Failure connection with the data base, please retry later")
     }
     console.log(`App listening at http://localhost:${port}`)
 })
