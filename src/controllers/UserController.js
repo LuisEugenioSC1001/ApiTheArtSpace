@@ -8,6 +8,8 @@ const validationEmail = async function existEmail(emailFuntion) {
 const register = async (userData) => {
 
     const { name, email, country, city, password, role, shop } = userData;
+    
+    const emailExist = await existEmail(email);
 
     function checkPassword(password) {
         const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -21,11 +23,12 @@ const register = async (userData) => {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
+    
     if (name == "") {
         return ({ "Status": "Failure", "Description": "The name cannot be empty" })
     } else if (!validateEmail(email)) {
         return ({ "Status": "Failure", "Description": "The email doesn't valid" })
-    } else if (existEmail(email)) {
+    } else if (emailExist) {
         return ({ "Status": "Failure", "Description": "The email is already on use" })
     } else if (country == "" || city == "") {
         return ({ "Status": "Failure", "Description": "The country and the city are required" });
