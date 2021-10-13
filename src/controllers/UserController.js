@@ -16,7 +16,7 @@ const register = async (userData) => {
         return re.test(password);
     }
     async function existEmail(emailFuntion) {
-        const response = await User.exists({ email: emailFuntion })
+        const response = await User.exists({ email: emailFuntion.toLowerCase() })
         return response;
     }
     function validateEmail(email) {
@@ -90,7 +90,6 @@ const login = async (userData) => {
             const DBData = await User.findOne({ email: email });
             const comparePass = await bcrypt.compare(password, DBData.password);
             if (DBData.email == email && comparePass) {
-                console.log("All ok");
                 return ({ "Status": "Success", "Description": "Login successfully" });
             } else {
                 return ({ "Status": "Failure", "Description": "The password doesn't concuerd" })
