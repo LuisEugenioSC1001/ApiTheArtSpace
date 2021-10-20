@@ -4,11 +4,11 @@ import Product from '../models/ProductModel.js';
 
 const registerProduct = async (productData) => {
 
-    const { id, name, stock, category, nameShop } = productData;
+    const { id, name, stock,price, category, nameShop,description } = productData;
 
 
 
-    if (name == "" || stock == null || category == "" || nameShop == "") {
+    if (name == "" || stock == null || category == "" || nameShop == ""|| price==null || description=="") {
 
         return ({ "Status": "Failure", "Description": "All data is required" });
     }
@@ -18,9 +18,11 @@ const registerProduct = async (productData) => {
             await Product.create(
                 {
                     name: name,
+                    price:price,
                     stock: stock,
                     category: category,
                     nameShop: nameShop,
+                    description: description,
                     active: true
 
 
@@ -96,7 +98,7 @@ const update = async product => {
 }
 
 const deleteProduct = async product => {
-    const { _id, name, nameShop, stock, category } = product;
+    const { _id, name, price, nameShop, stock, category, description } = product;
       
         try {
             await Product.updateOne({ _id: _id },
@@ -105,9 +107,11 @@ const deleteProduct = async product => {
                     $set: {
 
                         name: name,
+                        price:price,
                         stock: stock,
                         category: category,
                         nameShop: nameShop,
+                        description: description,
                         active:false
                     }
 
