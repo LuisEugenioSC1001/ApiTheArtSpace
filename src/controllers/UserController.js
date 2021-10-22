@@ -1,15 +1,9 @@
 import User from '../models/UserModel.js';
 import bcrypt from 'bcrypt';
 
-const validationEmail = async function existEmail(emailFuntion) {
-        const response = await User.exists({ email: emailFuntion })
-        return response;
-    }
 const register = async (userData) => {
 
     const { name, email, country, city, password, role, shop } = userData;
-    
-    const emailExist = await existEmail(email);
 
     function checkPassword(password) {
         const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -24,6 +18,8 @@ const register = async (userData) => {
         return re.test(String(email).toLowerCase());
     }
     
+    const emailExist = await existEmail(email);
+
     if (name == "") {
         return ({ "Status": "Failure", "Description": "The name cannot be empty" })
     } else if (!validateEmail(email)) {
@@ -47,7 +43,9 @@ const register = async (userData) => {
                         city: city,
                         password: bcrypt.hashSync(password, 8),
                         role: role,
-                        shop: ""
+                        shop: "",
+                        status: true
+
                     }
                 )
                 return ({ "Status": "Success", "Description": "User Create succesfully" })
@@ -63,9 +61,10 @@ const register = async (userData) => {
                         email: email,
                         country: country,
                         city: city,
-                        password: password,
+                        password: bcrypt.hashSync(password, 8),
                         role: role,
-                        shop: shop
+                        shop: shop,
+                        status: true
                     }
                 )
                 return ({ "Status": "Success", "Description": "User Create successfully" })
@@ -89,11 +88,17 @@ const login = async (userData) => {
         if (response) {
             const DBData = await User.findOne({ email: email });
             const comparePass = await bcrypt.compare(password, DBData.password);
-            if (DBData.email == email && comparePass) {
-                return ({ "Status": "Success", "Description": "Login successfully" });
+            const emailInhabilitado = DBData.status == true;
+            if (emailInhabilitado) {
+                if (DBData.email == email && comparePass) {
+                    return ({ "Status": "Success", "Description": "Login successfully" });
+                } else {
+                    return ({ "Status": "Failure", "Description": "The password doesn't concuerd" })
+                }
             } else {
-                return ({ "Status": "Failure", "Description": "The password doesn't concuerd" })
+                return ({ "Status": "Failure", "Description": "The user has been disabled by the admin" })
             }
+            
         } else {
             return ({ "Status": "Failure", "Description": "The email doesn't exist" });
         }
@@ -102,6 +107,67 @@ const login = async (userData) => {
         return ({ "Status": "Failure", "Description": "The email doesn't valid" });
     }
 }
-const userController = { login, register, validationEmail };
+
+
+const editUser = async (userData) => {
+    const { _id, name, country, city, password, role, shop } = userData;
+    if (name == "" || country == "" || city == "" || password == "") {
+        return ({ "Status": "Failure", "Description": "All data is required" });
+    } else {
+        try {
+            await User.updateOne({ _id: _id },
+                {
+                    $set: {
+                        name: name,
+                        country: country,
+                        city: city,
+                        password: password,
+                        role: role,
+                        shop: shop
+                    }
+
+                }
+            )
+            return { "Status": "Success", "Description": "The user has been successfully updated" };
+
+        } catch (error) {
+
+            return ({ "Status": "Failure", "Description": `The query failure with the error ${error}` });
+
+        }
+    }
+}
+
+const deleteUser = async (userData) => {
+    const { _id, name, country, city, password, role, shop } = userData;
+    try {
+        await User.updateOne({ _id: _id },
+            {
+                $set: {
+                    name: name,
+                    country: country,
+                    city: city,
+                    password: password,
+                    role: role,
+                    shop: shop,
+                    status: false
+                }
+
+            }
+        )
+        return { "Status": "Success", "Description": "The user has been successfully disabled" };
+
+    } catch (error) {
+
+        return ({ "Status": "Failure", "Description": `The query failure with the error ${error}` });
+
+    }
+}
+const getUsers = async () =>{
+    const dataDb = await User.find();
+    return { "Status": "Success", "Description": "Currents Users on the database", "Data":dataDb };
+}
+
+const userController = { login, register, editUser,deleteUser, getUsers};
 
 export default userController;

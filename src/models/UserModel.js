@@ -8,7 +8,8 @@ const UserModel = new UserSchema({
     city:{type:String, required:true},
     password:{type:String, required:true},
     role:{type:String, required:true},
-    shop:{type:String, required:false}
+    shop:{type:String, required:false},
+    status:{type:Boolean, required:true}
 });
 const User = mongoose.model("user",UserModel);
 export default User;

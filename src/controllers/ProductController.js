@@ -4,11 +4,11 @@ import Product from '../models/ProductModel.js';
 
 const registerProduct = async (productData) => {
 
-    const { id, name, stock,price, category, nameShop,description } = productData;
+    const { id, name, stock, price, category, nameShop, description } = productData;
 
 
 
-    if (name == "" || stock == null || category == "" || nameShop == ""|| price==null || description=="") {
+    if (name == "" || stock == null || category == "" || nameShop == "" || price == null || description == "") {
 
         return ({ "Status": "Failure", "Description": "All data is required" });
     }
@@ -18,7 +18,7 @@ const registerProduct = async (productData) => {
             await Product.create(
                 {
                     name: name,
-                    price:price,
+                    price: price,
                     stock: stock,
                     category: category,
                     nameShop: nameShop,
@@ -40,7 +40,7 @@ const registerProduct = async (productData) => {
 const findProducts = async () => {
     const response = await Product.exists();
     if (response) {
-        const DBData = await Product.find( { active:true });
+        const DBData = await Product.find({ active: true });
         return ({ "Status": "Success", "Description": "Products Found", "Data": DBData });
     } else {
 
@@ -80,7 +80,7 @@ const update = async product => {
                         stock: stock,
                         category: category,
                         nameShop: nameShop,
-                        active:true
+                        active: true
                     }
 
                 }
@@ -99,34 +99,31 @@ const update = async product => {
 
 const deleteProduct = async product => {
     const { _id, name, price, nameShop, stock, category, description } = product;
-      
-        try {
-            await Product.updateOne({ _id: _id },
-                {
 
-                    $set: {
+    try {
+        await Product.updateOne({ _id: _id },
+            {
 
-                        name: name,
-                        price:price,
-                        stock: stock,
-                        category: category,
-                        nameShop: nameShop,
-                        description: description,
-                        active:false
-                    }
+                $set: {
 
+                    name: name,
+                    price: price,
+                    stock: stock,
+                    category: category,
+                    nameShop: nameShop,
+                    description: description,
+                    active: false
                 }
-            )
-            return { "Status": "Success", "Description": "The product has been successfully deleted" };
 
-        } catch (error) {
+            }
+        )
+        return { "Status": "Success", "Description": "The product has been successfully deleted" };
 
-            return ({ "Status": "Failure", "Description": `The query failure with the error ${error}` });
+    } catch (error) {
 
-        }
+        return ({ "Status": "Failure", "Description": `The query failure with the error ${error}` });
 
-   
-
+    }
 }
 
 
