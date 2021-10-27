@@ -4,11 +4,11 @@ import Product from '../models/ProductModel.js';
 
 const registerProduct = async (productData) => {
 
-    const { name, stock, price, category, nameShop, description } = productData;
+    const { name, stock, price, category, nameShop, description, image } = productData;
 
 
 
-    if (name == "" || stock == null || category == "" || nameShop == "" || price == null || description == "") {
+    if (name == "" || stock == null || category == "" || nameShop == "" || price == null || description == "" || image=="" ) {
 
         return ({ "Status": "Failure", "Description": "All data is required" });
     }
@@ -22,8 +22,9 @@ const registerProduct = async (productData) => {
                     stock: stock,
                     category: category,
                     nameShop: nameShop,
-                    description: description,
-                    active: true
+                    description: descript,ion,
+                    active: true,
+                    image: image
 
 
                 }
@@ -63,9 +64,9 @@ const findSelectProducts = async nameShopfunction => {
 }
 
 const update = async product => {
-    const { _id, name, nameShop, stock, category } = product;
+    const { _id, name, nameShop, stock, category,image } = product;
 
-    if (name == "" || nameShop == "" || stock == "" || category == "") {
+    if (name == "" || nameShop == "" || stock == "" || category == ""|| image == "") {
 
         return ({ "Status": "Failure", "Description": "All data is required" });
     }
@@ -80,7 +81,9 @@ const update = async product => {
                         stock: stock,
                         category: category,
                         nameShop: nameShop,
-                        active: true
+                        active: true,
+                        image: image
+
                     }
 
                 }
@@ -98,7 +101,7 @@ const update = async product => {
 }
 
 const deleteProduct = async product => {
-    const { _id, name, price, nameShop, stock, category, description } = product;
+    const { _id, name, price, nameShop, stock, category, description,image } = product;
 
     try {
         await Product.updateOne({ _id: _id },
@@ -112,7 +115,8 @@ const deleteProduct = async product => {
                     category: category,
                     nameShop: nameShop,
                     description: description,
-                    active: false
+                    active: false,
+                    image:image
                 }
 
             }
