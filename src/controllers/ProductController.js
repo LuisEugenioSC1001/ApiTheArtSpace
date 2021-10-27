@@ -4,7 +4,7 @@ import Product from '../models/ProductModel.js';
 
 const registerProduct = async (productData) => {
 
-    const { id, name, stock, price, category, nameShop, description } = productData;
+    const { name, stock, price, category, nameShop, description } = productData;
 
 
 
