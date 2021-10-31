@@ -1,4 +1,4 @@
-import PurchaseOrder from "../models/PurchaseOrderModel";
+import PurchaseOrder from "../models/PurchaseOrderModel.js";
 
 const newOrder = async (orderData) => {
     const { date, user } = orderData;

@@ -1,5 +1,5 @@
 import express from "express";
-import PurchaseOrderController from "../controllers/PurchaseOrderController";
+import PurchaseOrderController from '../controllers/PurchaseOrderController.js'
 const productOrderRoutes = express.Router();
 
 productOrderRoutes.post('/neworder',async (req, res)=>{
