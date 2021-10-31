@@ -7,7 +7,7 @@ import productRoutes from "./routes/ProductRoutes.js";
 import productOrderRoutes from "./routes/PurchaseOrderRoutes.js";
 
 const app = express();
-const port =  settings.port;
+const port = process.env.PORT || settings.port;
 const url = settings.Url;
 
 app.use(express.json());

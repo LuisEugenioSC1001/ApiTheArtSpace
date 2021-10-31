@@ -17,7 +17,7 @@ const register = async (userData) => {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
     }
-    
+
     const emailExist = await existEmail(email);
 
     if (name == "") {
@@ -91,14 +91,20 @@ const login = async (userData) => {
             const emailInhabilitado = DBData.status == true;
             if (emailInhabilitado) {
                 if (DBData.email == email && comparePass) {
-                    return ({ "Status": "Success", "Description": "Login successfully" });
+                    return ({
+                        "Status": "Success", "Description": "Login successfully", "Data": {
+                            "name": DBData.name,
+                            "role": DBData.role,
+                            "shop": DBData.shop
+                        }
+                    });
                 } else {
                     return ({ "Status": "Failure", "Description": "The password doesn't concuerd" })
                 }
             } else {
                 return ({ "Status": "Failure", "Description": "The user has been disabled by the admin" })
             }
-            
+
         } else {
             return ({ "Status": "Failure", "Description": "The email doesn't exist" });
         }
@@ -163,11 +169,11 @@ const deleteUser = async (userData) => {
 
     }
 }
-const getUsers = async () =>{
+const getUsers = async () => {
     const dataDb = await User.find();
-    return { "Status": "Success", "Description": "Currents Users on the database", "Data":dataDb };
+    return { "Status": "Success", "Description": "Currents Users on the database", "Data": dataDb };
 }
 
-const userController = { login, register, editUser,deleteUser, getUsers};
+const userController = { login, register, editUser, deleteUser, getUsers };
 
 export default userController;
