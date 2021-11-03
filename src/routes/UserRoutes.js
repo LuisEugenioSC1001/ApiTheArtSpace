@@ -10,7 +10,7 @@ userRoutes.post('/register',async (req, res)=>{
     let response = await userController.register(req.body);
     res.json(response);
 })
-userRoutes.get('/findusers',async (req, res)=>{
+userRoutes.get('/users',async (req, res)=>{
     let response = await userController.getUsers();
     res.json(response);
 })
