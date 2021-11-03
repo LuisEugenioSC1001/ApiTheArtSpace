@@ -22,7 +22,7 @@ const registerProduct = async (productData) => {
                     stock: stock,
                     category: category,
                     nameShop: nameShop,
-                    description: descript,ion,
+                    description: description,
                     active: true,
                     image: image
 
