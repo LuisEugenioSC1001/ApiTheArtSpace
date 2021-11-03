@@ -12,7 +12,7 @@ productRoutes.get('/products',async (req, res)=>{
     res.json(response);
 })
 
-productRoutes.get('/getNameshopProducts',async (req, res)=>{
+productRoutes.post('/getNameshopProducts',async (req, res)=>{
     let response = await productController.findSelectProducts(req.body);
     res.json(response);
 })
