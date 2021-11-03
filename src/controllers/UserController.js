@@ -170,7 +170,7 @@ const deleteUser = async (userData) => {
     }
 }
 const getUsers = async () => {
-    const dataDb = await User.find();
+    const dataDb = await User.find({role: {$ne:"Admin"}});
     return { "Status": "Success", "Description": "Currents Users on the database", "Data": dataDb };
 }
 

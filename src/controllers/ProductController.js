@@ -4,11 +4,11 @@ import Product from '../models/ProductModel.js';
 
 const registerProduct = async (productData) => {
 
-    const { name, stock, price, category, nameShop, description, image } = productData;
+    const { name, stock, price, category, nameShop, description } = productData;
 
 
 
-    if (name == "" || stock == null || category == "" || nameShop == "" || price == null || description == "" || image=="" ) {
+    if (name == "" || stock == null || category == "" || nameShop == "" || price == null || description == "" ) {
 
         return ({ "Status": "Failure", "Description": "All data is required" });
     }
@@ -23,10 +23,7 @@ const registerProduct = async (productData) => {
                     category: category,
                     nameShop: nameShop,
                     description: description,
-                    active: true,
-                    image: image
-
-
+                    active: true
                 }
             )
             return ({ "Status": "Success", "Description": "Product Create successfully" })
@@ -64,9 +61,9 @@ const findSelectProducts = async nameShopfunction => {
 }
 
 const update = async product => {
-    const { _id, name, nameShop, stock, category,image } = product;
+    const { _id, name, nameShop, stock, category } = product;
 
-    if (name == "" || nameShop == "" || stock == "" || category == ""|| image == "") {
+    if (name == "" || nameShop == "" || stock == "" || category == "") {
 
         return ({ "Status": "Failure", "Description": "All data is required" });
     }
@@ -81,9 +78,7 @@ const update = async product => {
                         stock: stock,
                         category: category,
                         nameShop: nameShop,
-                        active: true,
-                        image: image
-
+                        active: true
                     }
 
                 }
@@ -101,22 +96,14 @@ const update = async product => {
 }
 
 const deleteProduct = async product => {
-    const { _id, name, price, nameShop, stock, category, description,image } = product;
+    const { _id } = product;
 
     try {
         await Product.updateOne({ _id: _id },
             {
 
                 $set: {
-
-                    name: name,
-                    price: price,
-                    stock: stock,
-                    category: category,
-                    nameShop: nameShop,
-                    description: description,
-                    active: false,
-                    image:image
+                    active: false
                 }
 
             }
