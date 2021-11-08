@@ -4,11 +4,11 @@ import Product from '../models/ProductModel.js';
 
 const registerProduct = async (productData) => {
 
-    const { name, stock, price, category, nameShop, description } = productData;
+    const { name, stock, price, category, nameShop, description, image } = productData;
 
 
 
-    if (name == "" || stock == null || category == "" || nameShop == "" || price == null || description == "" ) {
+    if (name == "" || stock == null || category == "" || nameShop == "" || price == null || description == "" || image == "") {
 
         return ({ "Status": "Failure", "Description": "All data is required" });
     }
@@ -23,7 +23,8 @@ const registerProduct = async (productData) => {
                     category: category,
                     nameShop: nameShop,
                     description: description,
-                    active: true
+                    active: true,
+                    image: image
                 }
             )
             return ({ "Status": "Success", "Description": "Product Create successfully" })
@@ -51,7 +52,6 @@ const findSelectProducts = async nameShopfunction => {
     const { nameShop } = nameShopfunction;
     const response = await Product.exists({ nameShop: nameShop })
 
-
     if (response) {
         const DBData = await Product.find({ nameShop: nameShop });
         return { "Status": "Success", "Description": "Product Found", "Data": DBData };
@@ -61,7 +61,7 @@ const findSelectProducts = async nameShopfunction => {
 }
 
 const update = async product => {
-    const { _id, name, nameShop, stock, category } = product;
+    const { _id, name, nameShop, stock, category, image, active, description, price } = product;
 
     if (name == "" || nameShop == "" || stock == "" || category == "") {
 
@@ -71,14 +71,15 @@ const update = async product => {
         try {
             await Product.updateOne({ _id: _id },
                 {
-
                     $set: {
-
                         name: name,
+                        price: price,
                         stock: stock,
                         category: category,
                         nameShop: nameShop,
-                        active: true
+                        description: description,
+                        active: active,
+                        image: image
                     }
 
                 }
@@ -96,19 +97,18 @@ const update = async product => {
 }
 
 const deleteProduct = async product => {
-    const { _id } = product;
+    const { _id, active } = product;
 
     try {
         await Product.updateOne({ _id: _id },
             {
-
                 $set: {
-                    active: false
+                    active: !active
                 }
 
             }
         )
-        return { "Status": "Success", "Description": "The product has been successfully deleted" };
+        return { "Status": "Success", "Description": `The product has been successfully ${!active}` };
 
     } catch (error) {
 

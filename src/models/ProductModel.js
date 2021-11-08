@@ -9,7 +9,8 @@ const ProductModel = new ProductSchema({
     category:{type:String, required:true},
     nameShop:{type:String, required:true}, 
     description:{type:String, required:true},
-    active:{type:Boolean, required:true}
+    active:{type:Boolean, required:true},
+    image:{type:String, required:false}
     
 });
 const Product = mongoose.model("product",ProductModel);
