@@ -47,6 +47,17 @@ const findProducts = async () => {
     }
 }
 
+const findProductsAdmin = async () => {
+    const response = await Product.exists();
+    if (response) {
+        const DBData = await Product.find();
+        return ({ "Status": "Success", "Description": "Products Found", "Data": DBData });
+    } else {
+
+        return ({ "Status": "Failure", "Description": "No products founds" });
+    }
+}
+
 const findSelectProducts = async nameShopfunction => {
 
     const { nameShop } = nameShopfunction;
@@ -118,6 +129,6 @@ const deleteProduct = async product => {
 }
 
 
-const productController = { registerProduct, findProducts, findSelectProducts, update, deleteProduct };
+const productController = { registerProduct, findProducts, findSelectProducts, update, deleteProduct, findProductsAdmin };
 
 export default productController;

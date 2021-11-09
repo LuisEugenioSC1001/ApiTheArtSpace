@@ -93,7 +93,7 @@ const login = async (userData) => {
                 if (DBData.email == email && comparePass) {
                     return ({
                         "Status": "Success", "Description": "Login successfully", "Data": {
-                            "name": DBData.name,
+                            "email": DBData.email,
                             "role": DBData.role,
                             "shop": DBData.shop
                         }
@@ -145,23 +145,16 @@ const editUser = async (userData) => {
 }
 
 const deleteUser = async (userData) => {
-    const { _id, name, country, city, password, role, shop } = userData;
+    const { _id, status } = userData;
     try {
         await User.updateOne({ _id: _id },
             {
                 $set: {
-                    name: name,
-                    country: country,
-                    city: city,
-                    password: password,
-                    role: role,
-                    shop: shop,
-                    status: false
+                    status: !status
                 }
-
             }
         )
-        return { "Status": "Success", "Description": "The user has been successfully disabled" };
+        return { "Status": "Success", "Description":  `The user has been successfully ${!status}` };
 
     } catch (error) {
 
@@ -169,11 +162,15 @@ const deleteUser = async (userData) => {
 
     }
 }
+const getUser = async (userData) => {
+    const dataDb = await User.findOne({email: userData.email});
+    return { "Status": "Success", "Description": "User on the database", "Data": dataDb };
+}
 const getUsers = async () => {
     const dataDb = await User.find({role: {$ne:"Admin"}});
     return { "Status": "Success", "Description": "Currents Users on the database", "Data": dataDb };
 }
 
-const userController = { login, register, editUser, deleteUser, getUsers };
+const userController = { login, register, editUser, deleteUser, getUsers, getUser };
 
 export default userController;

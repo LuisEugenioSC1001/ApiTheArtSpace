@@ -11,6 +11,10 @@ productRoutes.get('/products',async (req, res)=>{
     let response = await productController.findProducts(req.body);
     res.json(response);
 })
+productRoutes.get('/productsAdmin',async (req, res)=>{
+  let response = await productController.findProductsAdmin(req.body);
+  res.json(response);
+})
 
 productRoutes.post('/getNameshopProducts',async (req, res)=>{
     let response = await productController.findSelectProducts(req.body);

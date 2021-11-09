@@ -14,6 +14,10 @@ userRoutes.get('/users',async (req, res)=>{
     let response = await userController.getUsers();
     res.json(response);
 })
+userRoutes.post('/user',async (req, res)=>{
+    let response = await userController.getUser(req.body);
+    res.json(response);
+})
 userRoutes.post('/edituser',async (req, res)=>{
     let response = await userController.editUser(req.body);
     res.json(response);
