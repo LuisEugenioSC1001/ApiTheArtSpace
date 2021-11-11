@@ -12,9 +12,9 @@ const url = settings.Url;
 
 app.use(express.json());
 app.use(cors({ origin: true }));
-app.use(userRoutes);
-app.use(productRoutes);
-app.use(productOrderRoutes)
+app.use('/api',userRoutes);
+app.use('/api',productRoutes);
+app.use('/api',productOrderRoutes)
 app.listen(port, async () => {
     try {
         await mongoose.connect(url), {
